@@ -246,14 +246,9 @@ def celebration_pop_photos(image_paths, pops: int = 60):
     """
     components.html(html, height=560)
 
-def play_youtube_song():
-    components.html("""
-        <iframe width="0" height="0"
-        src="https://www.youtube.com/embed/vGJTaP6anOU?autoplay=1&controls=0"
-        frameborder="0"
-        allow="autoplay">
-        </iframe>
-    """, height=0)
+def play_music():
+    st.markdown("### 🎶 Our Song")
+    st.audio("music.mp3", format="audio/mp3", loop=True)
 
 def goto(step_name: str):
     st.session_state.step = step_name
@@ -544,7 +539,7 @@ elif step == "question":
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
 
-    play_youtube_song()
+    play_music()
 
     try:
         image_list = [
