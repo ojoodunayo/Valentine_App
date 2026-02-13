@@ -246,12 +246,25 @@ def celebration_pop_photos(image_paths, pops: int = 60):
     """
     components.html(html, height=560)
 
-def music_player_on_yes():
-    # Uses Streamlit’s native audio player (most compatible)
+def play_music_autostart():
     audio_bytes = Path("music.mp3").read_bytes()
-    st.markdown("### 🎶 Our Song")
-    st.audio(audio_bytes, format="audio/mp3", start_time=0)
-    st.caption("Tap ▶️ once (browser rule) — then it will play during the celebration 💖")
+    b64 = base64.b64encode(audio_bytes).decode()
+
+    components.html(
+        f"""
+        <audio id="song" autoplay loop>
+            <source src="data:audio/mp3;base64,{b64}" type="audio/mpeg">
+        </audio>
+
+        <script>
+            var audio = document.getElementById("song");
+            audio.play().catch(function(e) {{
+                console.log("Autoplay blocked:", e);
+            }});
+        </script>
+        """,
+        height=0
+    )
 
 
 def goto(step_name: str):
@@ -543,7 +556,7 @@ elif step == "question":
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
 
-    music_player_on_yes()
+    play_music_autostart()
 
     try:
         image_list = [
