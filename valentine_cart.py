@@ -553,17 +553,6 @@ elif step == "question":
 
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
-    
-    from pathlib import Path
-
-    st.write("music.mp3 exists:", Path("music.mp3").exists())
-
-    if Path("music.mp3").exists():
-        st.write("music.mp3 size:", Path("music.mp3").stat().st_size, "bytes")
-        audio_bytes = Path("music.mp3").read_bytes()
-        st.audio(audio_bytes, format="audio/mp3")
-    else:
-        st.error("music.mp3 not found in app folder")
 
     play_music_autostart()
 
