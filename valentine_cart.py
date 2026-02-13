@@ -247,23 +247,23 @@ def celebration_pop_photos(image_paths, pops: int = 60):
     components.html(html, height=560)
 
 def music_autoplay_gate():
-    audio_bytes = Path("music.mp3").read_bytes()
+    audio_bytes = Path("music.mp3").read_bytes()   
     b64 = base64.b64encode(audio_bytes).decode()
 
     components.html(
         f"""
         <div id="gate" style="
           position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-          background:rgba(0,0,0,0.45); z-index:9999;">
+          background:rgba(0,0,0,0.45); z-index:999999;">
           <button id="btn" style="
             font-size:22px; padding:18px 26px; border-radius:16px; border:none;
             background:#ff2b6a; color:white; font-weight:800; cursor:pointer;">
-            💖 Tap to start the celebration 🎶
+            💖 Tap once to start the celebration 🎶
           </button>
         </div>
 
         <audio id="song" loop>
-          <source src="data:audio/mp3;base64,{b64}" type="audio/mpeg">
+          <source src="data:audio/mpeg;base64,{b64}" type="audio/mpeg">
         </audio>
 
         <script>
@@ -271,18 +271,19 @@ def music_autoplay_gate():
           const gate = document.getElementById("gate");
           const song = document.getElementById("song");
 
-          btn.addEventListener("click", async () => {{
+          btn.onclick = async () => {{
             try {{
               await song.play();
               gate.remove();
-            }} catch(e) {{
-              btn.innerText = "Tap again to play 🎶";
+            }} catch (err) {{
+              btn.innerText = "Tap again 🎶";
             }}
-          }});
+          }};
         </script>
         """,
         height=0
     )
+
 
 def goto(step_name: str):
     st.session_state.step = step_name
