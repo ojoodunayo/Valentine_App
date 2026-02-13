@@ -246,18 +246,40 @@ def celebration_pop_photos(image_paths, pops: int = 60):
     """
     components.html(html, height=560)
 
-def play_music_autostart():
-    # Load audio bytes (works better on Streamlit Cloud)
+def music_autoplay_gate():
     audio_bytes = Path("music.mp3").read_bytes()
-
-    # Autoplay audio using HTML after a user interaction (YES click)
-    # This uses the browser's audio element, hidden.
     b64 = base64.b64encode(audio_bytes).decode()
+
     components.html(
         f"""
-        <audio autoplay loop>
+        <div id="gate" style="
+          position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+          background:rgba(0,0,0,0.45); z-index:9999;">
+          <button id="btn" style="
+            font-size:22px; padding:18px 26px; border-radius:16px; border:none;
+            background:#ff2b6a; color:white; font-weight:800; cursor:pointer;">
+            💖 Tap to start the celebration 🎶
+          </button>
+        </div>
+
+        <audio id="song" loop>
           <source src="data:audio/mp3;base64,{b64}" type="audio/mpeg">
         </audio>
+
+        <script>
+          const btn = document.getElementById("btn");
+          const gate = document.getElementById("gate");
+          const song = document.getElementById("song");
+
+          btn.addEventListener("click", async () => {{
+            try {{
+              await song.play();
+              gate.remove();
+            }} catch(e) {{
+              btn.innerText = "Tap again to play 🎶";
+            }}
+          }});
+        </script>
         """,
         height=0
     )
@@ -551,7 +573,7 @@ elif step == "question":
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
 
-    play_music_autostart()
+    music_autoplay_gate()
 
     try:
         image_list = [
