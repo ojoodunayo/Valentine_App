@@ -9,7 +9,7 @@ st.set_page_config(page_title="Valentine 💘", page_icon="💘", layout="center
 # =========================
 # CONFIG
 # =========================
-IMG_PATH = r"C:\Users\Admin\her.jpg"   # <-- change if needed
+IMG_PATH = r"C:\Users\Admin\her.jpg" 
 NAME = "Oluwatosin"
 
 # =========================
@@ -246,9 +246,21 @@ def celebration_pop_photos(image_paths, pops: int = 60):
     """
     components.html(html, height=560)
 
-def play_music():
-    st.markdown("### 🎶 Our Song")
-    st.audio("music.mp3", format="audio/mp3", loop=True)
+def play_music_autostart():
+    # Load audio bytes (works better on Streamlit Cloud)
+    audio_bytes = Path("music.mp3").read_bytes()
+
+    # Autoplay audio using HTML after a user interaction (YES click)
+    # This uses the browser's audio element, hidden.
+    b64 = base64.b64encode(audio_bytes).decode()
+    components.html(
+        f"""
+        <audio autoplay loop>
+          <source src="data:audio/mp3;base64,{b64}" type="audio/mpeg">
+        </audio>
+        """,
+        height=0
+    )
 
 def goto(step_name: str):
     st.session_state.step = step_name
@@ -539,7 +551,7 @@ elif step == "question":
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
 
-    play_music()
+        play_music_autostart()
 
     try:
         image_list = [
