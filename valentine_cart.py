@@ -246,43 +246,12 @@ def celebration_pop_photos(image_paths, pops: int = 60):
     """
     components.html(html, height=560)
 
-def music_autoplay_gate():
-    audio_bytes = Path("music.mp3").read_bytes()   
-    b64 = base64.b64encode(audio_bytes).decode()
-
-    components.html(
-        f"""
-        <div id="gate" style="
-          position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-          background:rgba(0,0,0,0.45); z-index:999999;">
-          <button id="btn" style="
-            font-size:22px; padding:18px 26px; border-radius:16px; border:none;
-            background:#ff2b6a; color:white; font-weight:800; cursor:pointer;">
-            💖 Tap once to start the celebration 🎶
-          </button>
-        </div>
-
-        <audio id="song" loop>
-          <source src="data:audio/mpeg;base64,{b64}" type="audio/mpeg">
-        </audio>
-
-        <script>
-          const btn = document.getElementById("btn");
-          const gate = document.getElementById("gate");
-          const song = document.getElementById("song");
-
-          btn.onclick = async () => {{
-            try {{
-              await song.play();
-              gate.remove();
-            }} catch (err) {{
-              btn.innerText = "Tap again 🎶";
-            }}
-          }};
-        </script>
-        """,
-        height=0
-    )
+def music_player_on_yes():
+    # Uses Streamlit’s native audio player (most compatible)
+    audio_bytes = Path("music.mp3").read_bytes()
+    st.markdown("### 🎶 Our Song")
+    st.audio(audio_bytes, format="audio/mp3", start_time=0)
+    st.caption("Tap ▶️ once (browser rule) — then it will play during the celebration 💖")
 
 
 def goto(step_name: str):
@@ -574,7 +543,7 @@ elif step == "question":
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
 
-    music_autoplay_gate()
+    music_player_on_yes()
 
     try:
         image_list = [
