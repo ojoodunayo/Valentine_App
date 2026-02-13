@@ -551,7 +551,7 @@ elif step == "question":
 elif step == "yes":
     st.markdown("<div class='question'><i>Yessss! 🎉💘</i></div>", unsafe_allow_html=True)
 
-        play_music_autostart()
+    play_music_autostart()
 
     try:
         image_list = [
